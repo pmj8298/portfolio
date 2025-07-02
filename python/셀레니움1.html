@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>셀레니움 크롤링 & MySQL & Folium 지도 시각화</title>
+  <style>
+    body {
+      font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #333;
+      padding: 0 20px;
+    }
+    h1, h2 {
+      color: #004d99;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    code {
+      font-family: Consolas, monospace;
+      color: #000000;
+      background-color: #f9f2f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #eee;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      margin: 10px 0 30px;
+      border-radius: 5px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
+  />
+</head>
+<body>
+
+  <h1>셀레니움 크롤링 &amp; MySQL 연동 &amp; Folium 지도 시각화</h1>
+
+  <h2>1. 개요</h2>
+  <p>
+    본 프로젝트는 셀레니움을 통해 스타벅스 부산 지역 매장 정보를 크롤링하고,
+    수집한 데이터를 MySQL에 저장하여 관리합니다.
+    이후 저장된 데이터를 활용해 <code>pandas</code>로 가공 후 CSV로 저장하며,
+    마지막으로 <code>folium</code> 라이브러리를 이용해 지도 위에 매장 위치를 시각화합니다.
+  </p>
+
+  <hr />
+
+  <h2>2. 셀레니움 크롤링 및 HTML 파싱</h2>
+  <pre><code>from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup as bs
+import time
+
+options = Options()
+options.binary_location = '.\\chrome-win64\\chrome.exe'
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--window-size=1920,1080')
+
+service = Service('chromedriver.exe')
+driver = webdriver.Chrome(service=service, options=options)
+driver.get('https://www.starbucks.co.kr/')
+
+hover_element = driver.find_element(By.CSS_SELECTOR, '#gnb > div > nav > div > ul > li.gnb_nav03 > h2 > a')
+menu_option = driver.find_element(By.CSS_SELECTOR,
+    '#gnb > div > nav > div > ul > li.gnb_nav03 > div > div > div > ul:nth-child(1) > li.gnb_sub_ttl > a')
+
+actions = ActionChains(driver)
+actions.move_to_element(hover_element).perform()
+time.sleep(1)
+menu_option.click()
+time.sleep(3)
+
+driver.find_element(By.CSS_SELECTOR,
+    "#container > div > form > fieldset > div > section > article.find_store_cont > article > header.loca_search > h3 > a").click()
+time.sleep(1)
+
+driver.find_element(By.CSS_SELECTOR,
+    "#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(6) > a").click()
+time.sleep(1)
+
+driver.find_element(By.CSS_SELECTOR,"#mCSB_2_container > ul > li:nth-child(1) > a").click()
+time.sleep(1)
+
+html = driver.page_source
+driver.quit()
+</code></pre>
+
+  <hr />
+
+  <h2>3. HTML 파싱으로 매장 데이터 추출</h2>
+  <pre><code>star_list = []
+soup = bs(html, 'html.parser')
+contents = soup.select('#mCSB_3_container > ul > li')
+
+for c in contents:
+    result = (
+        c['data-name'],
+        c['data-lat'],
+        c['data-long'],
+        c.select_one('p.result_details').text,
+        c.select_one('i')['class'][0]
+    )
+    star_list.append(result)
+print(star_list)
+</code></pre>
+
+  <hr />
+
+  <h2>4. MySQL 연결 및 데이터 저장</h2>
+  <pre><code>import mysql.connector
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="1234",
+    database="mj0824"
+)
+cursor = conn.cursor()
+
+query = '''
+CREATE TABLE IF NOT EXISTS star(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    s_name VARCHAR(50),
+    s_lat VARCHAR(50),
+    s_long VARCHAR(50),
+    s_address VARCHAR(100),
+    type VARCHAR(50)
+)
+'''
+cursor.execute(query)
+
+for data in star_list:
+    sql = 'INSERT INTO star (s_name, s_lat, s_long, s_address, type) VALUES (%s, %s, %s, %s, %s)'
+    cursor.execute(sql, data)
+conn.commit()
+</code></pre>
+
+  <hr />
+
+  <h2>5. 데이터 가공 및 CSV 파일 저장</h2>
+  <pre><code>import pandas as pd
+from datetime import datetime
+from sqlalchemy import create_engine
+
+user = 'root'
+password = '1234'
+host = 'localhost'
+port = '3306'
+database = 'mj0824'
+
+engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}')
+query = 'SELECT s_name, s_lat, s_long, s_address, type FROM star'
+df = pd.read_sql(query, engine)
+
+timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+csv_path = f'starbucks_{timestamp}.csv'
+df.to_csv(csv_path, index=False)
+print('CSV 파일 생성 완료:', csv_path)
+</code></pre>
+
+  <hr />
+
+  <h2>6. Folium을 활용한 지도 시각화</h2>
+  <p>
+    저장된 CSV 파일을 불러와 <code>folium</code> 라이브러리를 이용해
+    지도에 스타벅스 매장 위치를 마커와 원형 마커로 표시합니다.
+    매장 타입별로 마커 색상을 구분하여 가독성을 높였습니다.
+  </p>
+  <pre><code>import pandas as pd
+import folium
+
+file_path = './starbucks_20250411122227.csv'  # 실제 파일명에 맞게 변경
+data = pd.read_csv(file_path)
+data = data[['이름','위도','경도','주소','타입']]
+
+fixdata = data[['이름','위도','경도']]
+coordinates = fixdata[['위도','경도']].to_numpy()
+place = fixdata['이름'].to_numpy()
+
+center_lat, center_lon = 35.17574517, 129.0817409
+m = folium.Map(location=[center_lat, center_lon], zoom_start=12)
+
+store_type = data['타입']
+
+for i, (lat, lon) in enumerate(coordinates):
+    if store_type[i] == 'pin_generalDT':
+        ccolor = 'blue'
+        fcolor = 'white'
+    elif store_type[i] == 'pin_general':
+        ccolor = 'green'
+        fcolor = 'white'
+    else:
+        ccolor = 'red'
+        fcolor = 'white'
+    folium.CircleMarker(
+        location=[lat, lon],
+        radius=10,
+        color=ccolor,
+        fill=True,
+        fill_color=fcolor,
+        fill_opacity=1,
+        tooltip=place[i]
+    ).add_to(m)
+
+    folium.Marker(
+        location=[lat + 0.001, lon],
+        icon=folium.DivIcon(f'''
+            <div style="font-size: 9px; color:black; background-color: white; 
+                        width:50px; white-space:nowrap; overflow:hidden; 
+                        text-overflow:ellipsis; opacity:0.7; border-radius:5px">
+                {place[i]}
+            </div>
+        ''')
+    ).add_to(m)
+
+m.save('starbucks_map.html')
+</code></pre>
+  <p>생성된 <code>starbucks_map.html</code> 파일을 열어 부산 스타벅스 매장 위치를 확인할 수 있습니다.</p>
+  <img src="./img/스타벅스.png" alt="스타벅스 부산 매장 지도 시각화" />
+
+
+  <hr />
+
+  <h2>7. 결론</h2>
+  <p>
+    이번 프로젝트는 셀레니움으로 동적 웹사이트에서 데이터를 크롤링하는 방법부터
+    MySQL에 저장 및 관리, pandas를 이용한 데이터 가공, 마지막으로 folium을 활용한
+    지도 시각화까지 전체 파이프라인을 구축하였습니다.
+    이러한 과정은 데이터 수집부터 분석 및 시각화까지 실무에서 매우 중요한 워크플로우를 포함합니다.
+  </p>
+
+</body>
+</html>

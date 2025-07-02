@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>날씨 크롤러 코드</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 40px auto;
+    line-height: 1.5;
+    color: #333;
+  }
+  h1 {
+    color: #004080;
+  }
+  h2 {
+    color: #0066cc;
+  }
+  pre {
+    background: #f0f0f0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  p {
+    margin-bottom: 1em;
+  }
+</style>
+</head>
+<body>
+
+<h1>1. 날씨 크롤러 코드</h1>
+
+<h2>개요</h2>
+<p>기상청 단기예보 페이지에서 날씨 정보를 크롤링하여 최저기온과 최고기온 데이터를 추출하고, 데이터프레임으로 정리하여 CSV 파일로 저장하는 파이썬 코드입니다.</p>
+
+<h2>코드</h2>
+<pre><code>import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+def fetch_weather():
+    url = "https://www.weather.go.kr/w/weather/forecast/short-term.do?stnId=159"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    tb = soup.select('.table-col')[0]
+    rows = tb.select('tr')
+    header = rows[0].select('th')
+    line1 = ['최저기온'] + rows[1].select('td')
+    line2 = ['최고기온'] + rows[2].select('td')
+
+    raw_data = []
+    for h, l1, l2 in zip(header, line1, line2):
+        try:
+            out = h.text + ': ' + l1.text + ' / ' + l2.text
+        except:
+            out = h.text + ' :' + str(l1) + ' / ' + str(l2)
+        raw_data.append(out)
+
+    parsed_data = []
+    for entry in raw_data[1:]:
+        date, temps = entry.split(':')
+        low_temp, high_temp = temps.split('/')
+        parsed_data.append([date.strip(), low_temp.strip(), high_temp.strip()])
+
+    df = pd.DataFrame(parsed_data, columns=['날짜', '최저기온', '최고기온'])
+    df.to_csv('weather_x.csv', index=False, encoding='utf-8-sig')
+    print("CSV 저장 완료: weather_x.csv")
+    return df
+
+if __name__ == '__main__':
+    df = fetch_weather()
+    print(df)
+</code></pre>
+<img src="./img/날씨.png" alt="">
+
+<h2>결론</h2>
+<p>이 코드를 통해 기상청 웹사이트의 데이터를 효율적으로 크롤링하고, 정제된 형태로 저장하여 후속 데이터 분석 및 활용에 용이한 형태로 가공할 수 있습니다.</p>
+
+</body>
+</html>

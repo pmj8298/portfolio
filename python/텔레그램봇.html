@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>텔레그램 봇 코드</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 40px auto;
+    line-height: 1.5;
+    color: #333;
+  }
+  h1 {
+    color: #004080;
+  }
+  h2 {
+    color: #0066cc;
+  }
+  pre {
+    background: #f0f0f0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  p {
+    margin-bottom: 1em;
+  }
+</style>
+</head>
+<body>
+
+<h1>2. 텔레그램 봇 코드</h1>
+
+<h2>개요</h2>
+<p>python-telegram-bot 라이브러리를 사용하여 키워드에 반응하는 간단한 텔레그램 봇을 구현하는 코드입니다. 특정 단어를 감지하면 사전에 정의된 메시지를 사용자에게 전송합니다.</p>
+
+<h2>코드</h2>
+<pre><code>from telegram import Update
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+
+TRIGGER_WORDS = {
+    '안녕': '안녕하세요! 반가워용😊',
+    '정보': '어떤 정보가 필요하세요?🤔',
+    '기분': '오늘 기분이 좋아요😍'
+}
+
+async def start(update: Update, context):
+    await update.message.reply_text('안녕! 무엇을 도와드릴까요?')
+
+async def monitor_chat(update: Update, context):
+    user_text = update.message.text
+    chat_id = update.message.chat_id
+
+    for key, response in TRIGGER_WORDS.items():
+        if key in user_text:
+            await context.bot.send_message(chat_id=chat_id, text=response)
+            break
+
+def main():
+    TOKEN = 'YOUR_BOT_TOKEN_HERE'  # 본인의 토큰으로 변경하세요
+    app = Application.builder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler('start', start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, monitor_chat))
+
+    print('봇 실행 중...')
+    app.run_polling()
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+
+<h2>결론</h2>
+<p>이 텔레그램 봇 코드는 특정 키워드에 대해 자동으로 응답함으로써 간단한 채팅 응답 기능을 구현할 수 있으며, 확장하여 다양한 기능을 추가할 수 있는 기초가 됩니다.</p>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>교통사고 분석 결과</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        line-height: 1.6;
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+      }
+      h1,
+      h2 {
+        color: #2c3e50;
+      }
+      img {
+        max-width: 100%;
+        margin: 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+      }
+      .section {
+        margin-bottom: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>교통사고 데이터 분석 및 시각화</h1>
+
+    <div class="section">
+      <h2>1. 개요</h2>
+      <p>
+        본 분석은 공공데이터포털에서 제공하는
+        <strong>"전국 교통사고 다발지역 표준데이터"</strong>를 기반으로
+        하였습니다.<br />
+        사고 유형별 발생 건수와 각 유형에 대한 연도별 추이를 시각적으로
+        분석하였습니다.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>2. 사고 유형별 전체 사고건수 분석</h2>
+      <p>다음 파이차트는 전체 데이터를 사고 유형별로 집계한 결과입니다.</p>
+      <img src="./img/교통사고1.png" alt="사고 유형별 파이차트" />
+    </div>
+
+    <div class="section">
+      <h2>3. 사고 유형별 연도별 분석</h2>
+      <p>각 사고 유형에 대해 연도별 사고 건수를 시각화한 파이차트입니다.</p>
+
+      <img src="./img/교통사고_보행.png" alt="사고유형 0" />
+      <img src="./img/교통사고_보행어린이.png" alt="사고유형 1" />
+      <img src="./img/교통사고_무단횡단.png" alt="사고유형 2" />
+      <img src="./img/교통사고_스쿨존.png" alt="사고유형 3" />
+      <img src="./img/교통사고_자전거.png" alt="사고유형 4" />
+      <img src="./img/교통사고_pie.png" alt="사고유형 4" />
+    </div>
+
+    <div class="section">
+      <h2>4. 결론</h2>
+      <p>
+        본 시각화를 통해 특정 사고 유형의 비중과 연도별 추이를 한눈에 파악할 수
+        있습니다.<br />
+        이를 바탕으로 향후 교통안전 대책 수립 및 정책 결정에 활용될 수 있습니다.
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>청소년 정신건강 분석 (2023-2024)</title>
+<style>
+  body { max-width: 900px; margin: 2rem auto; font-family: '맑은 고딕', Arial, sans-serif; background: #fafafa; color: #333; line-height: 1.6; padding: 1rem; }
+  h1, h2 { color: #2c3e50; }
+  h1 { border-bottom: 3px solid #3498db; padding-bottom: 0.3rem; margin-bottom: 1.5rem; }
+  section { margin-bottom: 2.5rem; background: white; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.05); }
+  pre { background: #f4f6f8; padding: 1rem; border-radius: 5px; overflow-x: auto; font-size: 0.9rem; }
+  img { max-width: 100%; margin: 1rem 0; border-radius: 6px; box-shadow: 0 0 6px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+
+<h1>청소년 정신건강 분석 (2023-2024)</h1>
+
+<section>
+  <h2>1. 개요</h2>
+  <p>이 분석은 2023년과 2024년 청소년 정신건강 관련 통계 데이터를 바탕으로 스트레스, 우울감 경험률, 자살 생각률에 대한 현황을 파악하고, 두 해를 비교하여 변화 추이를 시각화하는 것을 목표로 합니다.</p>
+</section>
+
+<section>
+  <h2>2. 데이터 전처리</h2>
+  <p>원본 CSV 데이터를 불러와서, 불필요한 '시점' 컬럼과 첫 번째 행을 제거한 뒤, '응답' 컬럼을 생성해 '그렇다', '아니다'로 분류하였습니다. '아니다' 응답값은 100에서 '그렇다' 값을 뺀 보완값으로 계산했습니다. 마지막으로 응답을 인덱스로 설정해 데이터 구조를 완성했습니다.</p>
+  <pre><code>import pandas as pd
+
+# 2024년 데이터 불러오기 및 컬럼명 설정
+ori = pd.read_csv('./ref/청소년정신건강20250304.csv')
+ori.columns = ['시점','스트레스','스트레스남학생','스트레스여학생','우울감경험률','우울남학생','우울여학생','자살생각률','자살남학생','자살여학생']
+
+# 1행부터 스트레스 열부터 선택 및 '아니다' 응답 생성
+ori = ori.loc[1:, '스트레스':]
+ori.loc[2] = 100 - ori.loc[1, '스트레스':].astype(float)
+ori['응답'] = ['그렇다', '아니다']
+
+# 응답을 인덱스로 설정
+ori = ori.set_index('응답')
+  </code></pre>
+  <!-- <img src="attachment:ef19f0a1-def6-47cb-b4b3-cf33509440f8.png" alt="2024년 전처리 데이터" /> -->
+</section>
+
+<section>
+  <h2>3. 시각화 (2024년 데이터)</h2>
+  <p>스트레스, 우울감 경험률, 자살 생각률을 파이차트로 시각화하여 각 항목별 응답 비율을 한눈에 보여줍니다.</p>
+  <pre><code>import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(1, 3, figsize=(10,8))
+
+ori['스트레스'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[0])
+ax[0].set_title('스트레스를 받은 적 있다.')
+ax[0].set_ylabel('2024')
+
+ori['우울감경험률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[1])
+ax[1].set_title('우울증을 경험한 적 있다.')
+
+ori['자살생각률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[2])
+ax[2].set_title('자살을 생각한 적 있다.')
+
+plt.suptitle('정신건강 관련 통계 (2024)', fontsize=16)
+plt.show()
+  </code></pre>
+  <img src="./img/청소년2.png" alt="2024년 정신건강 파이차트" />
+</section>
+
+<section>
+  <h2>4. 2023년 데이터 처리 및 시각화</h2>
+  <p>2023년 데이터도 동일한 방식으로 전처리 후, 2023년과 2024년 각 항목별 응답 비율을 비교하는 2행 3열 파이차트로 시각화하였습니다.</p>
+  <pre><code># 2023년 데이터 불러오기 및 전처리
+data = pd.read_csv('./ref/청소년정신건강2023.csv')
+data.columns = ori.columns.insert(0, '시점')
+
+data = data.loc[1:, '스트레스':]
+data.loc[2] = 100 - data.loc[1, '스트레스':].astype(float)
+data['응답'] = ['그렇다', '아니다']
+data = data.set_index('응답')
+
+# 2023-2024년 파이차트 비교 시각화
+fig, ax = plt.subplots(2, 3, figsize=(10,8))
+
+# 2023년
+data['스트레스'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[0][0])
+ax[0][0].set_title('스트레스 (2023)')
+data['우울감경험률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[0][1])
+ax[0][1].set_title('우울증 경험 (2023)')
+data['자살생각률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[0][2])
+ax[0][2].set_title('자살 생각 (2023)')
+
+# 2024년
+ori['스트레스'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[1][0])
+ax[1][0].set_title('스트레스 (2024)')
+ori['우울감경험률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[1][1])
+ax[1][1].set_title('우울증 경험 (2024)')
+ori['자살생각률'].astype(float).plot.pie(explode=[0,0.02], autopct='%.1f%%', ax=ax[1][2])
+ax[1][2].set_title('자살 생각 (2024)')
+
+plt.suptitle('정신건강 관련 통계 (2023-2024)', fontsize=16)
+plt.show()
+  </code></pre>
+  <img src="./img/청소년1.png" alt="2023-2024년 정신건강 파이차트 비교" />
+</section>
+
+<section>
+  <h2>5. 결론</h2>
+  <p>2023년과 2024년 데이터를 비교한 결과, 청소년들의 스트레스, 우울감 경험률, 자살 생각률이 전반적으로 비슷하거나 소폭 변화하는 경향을 보였습니다. 시각화 자료를 통해 각 항목별 긍정 응답('그렇다')과 부정 응답('아니다')의 비율을 명확히 파악할 수 있으며, 향후 정신건강 증진 정책 수립에 참고할 수 있는 기초 자료로 활용 가능합니다.</p>
+</section>
+
+</body>
+</html>

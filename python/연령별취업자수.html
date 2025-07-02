@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>연령별 취업자 수 관계 분석 (2023-2025)</title>
+  <style>
+    body {
+      font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2 {
+      color: #004d99;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 0.95em;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      margin: 10px 0 30px;
+      border-radius: 5px;
+    }
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>연령별 취업자 수 관계 분석 (2023-2025)</h1>
+
+  <h2>1. 개요</h2>
+  <p>
+    국가통계포털에서 행정구역(시도), 성별, 연령별 취업자 데이터를 다운로드하여
+    전처리 및 시각화 진행.
+    이를 통해 연도별 취업자 수 변화와 남녀 취업자 수 차이 분석.
+  </p>
+
+  <hr />
+
+  <h2>2. 데이터 준비 및 전처리</h2>
+  <p>아래 코드는 한글 폰트 설정과 데이터 로드, 전처리를 수행</p>
+  <pre><code>import matplotlib.pyplot as plt
+from matplotlib import rc
+import matplotlib.font_manager as fm
+import pandas as pd
+
+# 한글 폰트 설정 (Windows)
+path = "C:\\Windows\\Fonts\\H2GPRM.TTF"
+font_name = fm.FontProperties(fname=path).get_name()
+rc('font', family=font_name)
+
+# 데이터 로드 및 전처리
+file_path = './ref/행정구역시도성연령별취업자_20250304.csv'
+ori = pd.read_csv(file_path, encoding='EUC-KR')
+
+ex_data = ori.copy()
+ex_data.columns = ['resion', 'year', 'age', 'gender', 'value']
+ex_data.loc[ex_data['resion'] == '세종특별자치시', 'value'] = ex_data.loc[ex_data['resion'] == '세종특별자치시', 'value'].replace('-', 0)
+ex_data['value'] = ex_data['value'].astype(int)
+
+ex1_data = ex_data.groupby('year')['value'].sum().reset_index(name='total')</code></pre>
+
+  <hr />
+
+  <h2>3. 연도별 전체 취업자 수 시각화</h2>
+  <p>2011년부터 2023년까지 연도별 취업자 총합을 라인 그래프로 표현.</p>
+  <pre><code>ax = ex1_data.plot(x='year', y='total', figsize=(10,5), title='년도별 취업자 수')
+ax.set_xticks(range(len(ex1_data)))
+ax.set_xticklabels(ex1_data['year'], rotation=45)
+plt.show()</code></pre>
+  <img src="./img/취업자1.png" alt="년도별 취업자 수 그래프" />
+
+  <hr />
+
+  <h2>4. 성별 취업자 수 분석</h2>
+  <p>남성과 여성의 연도별 취업자 수를 비교하여 시각화</p>
+  <pre><code>gen = ex_data.groupby(['year', 'gender'])['value'].sum().reset_index(name='total')
+
+male = gen[gen['gender'] == '남자']
+female = gen[gen['gender'] == '여자']
+
+plt.figure(figsize=(15,5))
+plt.plot(male['year'], male['total'], label='남자', color='blue', ls='-', marker='*')
+plt.plot(female['year'], female['total'], label='여자', color='hotpink', ls='-', marker='*')
+plt.xticks(range(len(ex1_data)))
+plt.xticks(ex1_data['year'], rotation=45)
+plt.legend()
+plt.title('년도별 성별 취업자 수 비교')
+plt.show()</code></pre>
+  <img src="./img/취업자2.png" alt="성별 취업자 수 비교 그래프" />
+
+  <hr />
+
+  <h2>5. 결론</h2>
+  <p>
+    연도별 취업자 수는 전반적으로 변동이 있으며, 남성 취업자 수가 여성보다 많지만
+    두 그룹 모두 변동 패턴을 보임
+    향후 연령별, 지역별, 직종별 추가 분석으로 더욱 세부적인 취업 현황 파악이 필요
+  </p>
+
+</body>
+</html>

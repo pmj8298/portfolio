@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kafka 실습</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #0059b3;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    code {
+      font-family: Consolas, monospace;
+      background-color: #eef3f8;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>1. 개요</h1>
+  <p>
+    Docker를 이용해 Kafka와 Zookeeper를 간단히 실행하고, Kafka 토픽을 생성하여 메시지 송수신.
+    <br />
+    <code>docker-compose.yml</code> 파일을 이용해 Zookeeper와 Kafka 컨테이너를 실행한 뒤, Kafka CLI 도구로 토픽 생성과 메시지 생산자 및 소비자 연습
+  </p>
+
+  <h2>docker-compose.yml 설정</h2>
+  <pre><code>services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+</code></pre>
+
+  <h2>2. 결론</h2>
+  <p>
+    컨테이너 실행 후 Kafka 쉘에 접속해 토픽을 생성하고 메시지를 송수신함으로써 Kafka의 기본적인 작동 원리를 익힘
+  </p>
+
+  <h3>실습 단계 요약</h3>
+  <ol>
+    <li>도커 컴포즈로 Zookeeper, Kafka 실행: <code>docker compose up -d</code></li>
+    <li>Kafka 컨테이너 내부로 진입: <code>docker exec -it kafka bash</code></li>
+    <li>Kafka 토픽 생성:
+      <pre><code>kafka-topics.sh --create --topic topic1 --bootstrap-server kafka:9092 --replication-factor 1 --partitions 2</code></pre>
+    </li>
+    <li>별도 터미널에서 Kafka 프로듀서 실행 후 메시지 입력:
+      <pre><code>kafka-console-producer.sh --topic topic1 --broker-list kafka:9092
+&gt;안녕
+&gt;택배조착
+      </code></pre>
+    </li>
+    <li>다른 터미널에서 Kafka 컨슈머 실행해 메시지 확인:
+      <pre><code>kafka-console-consumer.sh --topic topic1 --bootstrap-server kafka:9092
+안녕
+택배조착
+      </code></pre>
+    </li>
+  </ol>
+
+  <p>
+    이렇게 프로듀서에서 보낸 메시지가 컨슈머에서 실시간으로 출력되는 것을 확인하며 Kafka 메시지 스트리밍의 기본 흐름을 알 수 있음
+  </p>
+</body>
+</html>

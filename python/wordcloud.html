@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>워드클라우드 프로젝트</title>
+    <style>
+      body {
+        font-family: "맑은 고딕", Arial, sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+        line-height: 1.6;
+        color: #333;
+        background: #fafafa;
+      }
+      h1,
+      h2 {
+        color: #2c3e50;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        margin: 20px 0;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      section {
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>워드클라우드 프로젝트</h1>
+
+    <section>
+      <h2>프로젝트 개요</h2>
+      <p>
+        한글 텍스트 데이터에서 명사를 추출해 워드클라우드를 생성하고, 주요
+        단어들의 빈도수를 시각화
+      </p>
+    </section>
+
+    <section>
+      <h2>핵심 코드</h2>
+      <pre>
+from wordcloud import WordCloud
+from konlpy.tag import Komoran
+import matplotlib.pyplot as plt
+
+text = '''(텍스트 내용)'''
+
+komoran = Komoran()
+nouns = komoran.nouns(text)
+nouns_text = ' '.join(nouns)
+
+wordcloud = WordCloud(
+    font_path='D2Coding-Ver1.3.2-20180524.ttf', 
+    width=800, height=400, background_color='lightgrey'
+).generate(nouns_text)
+
+plt.figure(figsize=(10,5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
+    </pre
+      >
+    </section>
+
+    <section>
+      <h2>분석 결과</h2>
+      <p>
+        명사 단어들을 추출해 단어 빈도수를 세어, 이를 기반으로 워드클라우드를
+        생성하여 데이터 내 주요 키워드를 시각화
+      </p>
+    </section>
+
+    <section>
+      <h2>시각화 이미지</h2>
+      <img src="./img/워드클라우드.png" alt="워드클라우드 이미지" />
+    </section>
+
+    <section>
+      <h2>느낀 점 및 배운 점</h2>
+      <p>
+        텍스트 전처리와 자연어 처리 기법을 실제 데이터에 적용해보고, 시각화를
+        통해 데이터를 직관적으로 표현하는 방법을 배움
+      </p>
+    </section>
+  </body>
+</html>

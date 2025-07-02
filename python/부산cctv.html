@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>부산 CCTV 설치 수와 범죄 연관성 분석</title>
+  <style>
+    body {
+      font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2 {
+      color: #004d99;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 0.95em;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      margin: 10px 0 30px;
+      border-radius: 5px;
+    }
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>부산 CCTV 설치 수와 범죄 연관성 분석</h1>
+
+  <h2>1. 개요</h2>
+  <p>
+    부산광역시의 방범용 CCTV 설치 현황과 인구 데이터를 활용해 지역별 CCTV 설치 수를 시각화하고,
+    CCTV 수와 인구 수 간의 상관관계를 분석함으로써 범죄 예방 인프라의 분포와 형평성을 진단합니다.
+  </p>
+
+  <hr />
+
+  <h2>2. CCTV 데이터 로드 및 정제</h2>
+  <pre><code>import pandas as pd
+file_path = '부산광역시방범용CCTV 정보20230622.csv'
+CCTV = pd.read_csv(file_path, encoding='EUC-KR')
+cctv = CCTV.rename(columns={'CCTV 그룹':'local'})['local']
+cctv = cctv.apply(lambda x: x.split('-')[0])
+cctv = cctv.value_counts().reset_index()
+cctv.columns = ['local', 'count']</code></pre>
+  <!-- <img src="" alt="지역별 CCTV 설치 수" /> -->
+
+  <hr />
+
+  <h2>3. 인구 데이터 로드 및 전처리</h2>
+  <pre><code>file_path2 = '연령별인구현황월간202306.xlsx'
+ori = pd.read_excel(file_path2, sheet_name='연령별인구현황', skiprows=3)
+data1 = ori[['행정기관','총 인구수']].copy()
+data1.columns = ['local','population']
+data1 = data1.loc[1:]  # 총계 제거
+data1['local'] = data1['local'].apply(lambda x: x.replace('부산광역시 ',''))</code></pre>
+
+  <pre><code>data1['local'] = data1['local'].apply(lambda x: x.replace('구','').replace('군','').replace('부산진','진구').strip())
+data1 = data1.reset_index(drop=True)</code></pre>
+  <!-- <img src="" alt="지역별 인구 정제 결과" /> -->
+
+  <hr />
+
+  <h2>4. CCTV + 인구 데이터 병합</h2>
+  <pre><code>total = pd.merge(cctv, data1, on='local')
+total['population'] = total['population'].str.replace(',','').astype(int)
+total = total.sort_values(by='population', ascending=False)
+total = total.set_index('local')</code></pre>
+  <!-- <img src="" alt="지역별 CCTV + 인구 통합 테이블" /> -->
+
+  <hr />
+
+  <h2>5. 지역별 CCTV 설치 수 시각화</h2>
+  <pre><code>total['count'].sort_values().plot(kind='barh', grid=True, figsize=(7,7), ylabel='구')
+plt.title('CCTV 구별 데이터')
+plt.xlabel('CCTV 설치대 수')
+plt.show()</code></pre>
+  <img src="./img/구별cctv.png" alt="CCTV 설치대 수 그래프" />
+
+  <hr />
+
+  <h2>6. 인구 수 대비 CCTV 수 선형 회귀 분석</h2>
+  <pre><code>import numpy as np
+
+fp1 = np.polyfit(total['population'], total['count'], 1)
+f1 = np.poly1d(fp1)
+fx = np.linspace(40000, 400000, 10)
+
+plt.figure(figsize=(9,9))
+plt.plot(fx, f1(fx), ls='dashed', lw=3, color='g')
+plt.scatter(total['population'], total['count'], s=30)
+
+for i in range(len(total)):
+    plt.text(total['population'].iloc[i]*0.95, total['count'].iloc[i]*1.007, total.index[i], fontsize=15)
+
+plt.xlabel('인구 수')
+plt.ylabel('CCTV 수')
+plt.show()</code></pre>
+  <img src="./img/cctv회귀.png" alt="인구 대비 CCTV 설치 회귀선 시각화" />
+
+  <hr />
+
+  <h2>7. CCTV 설치 편차 시각화</h2>
+  <pre><code>total['err'] = np.abs(total['count'] - f1(total['population']))
+
+plt.figure(figsize=(14,8))
+plt.plot(fx, f1(fx), ls='dashed', lw=3, color='b')
+plt.scatter(total['population'], total['count'], s=30, c=total['err'])
+
+for i in range(len(total)):
+    plt.text(total['population'].iloc[i]*0.95, total['count'].iloc[i]*1.007, total.index[i], fontsize=15)
+
+plt.colorbar()
+plt.grid()
+plt.xlabel('인구 수')
+plt.ylabel('CCTV 수')
+plt.show()</code></pre>
+  <img src="./img/cctv편차.png" alt="CCTV 설치 수 편차 시각화" />
+
+  <hr />
+
+  <h2>8. 결론</h2>
+  <p>
+    분석 결과, 인구가 많은 지역일수록 CCTV 설치 수도 대체로 많았지만, 특정 지역에서는 인구 대비 CCTV 설치 수가 과하거나 부족한 경향이 나타났습니다.
+    특히 고령 인구가 많고 치안 수요가 높은 지역에서 CCTV가 부족할 경우, 범죄 예방 사각지대가 발생할 수 있습니다.
+    향후 지역별 범죄율과의 교차분석을 통해 보다 정밀한 정책 수립이 요구됩니다.
+  </p>
+
+</body>
+</html>

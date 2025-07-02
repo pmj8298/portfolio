@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>인천공항 이용자 수 분석 및 예측</title>
+  <style>
+    body {
+      font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2 {
+      color: #004d99;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 0.95em;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid #ccc;
+      margin: 10px 0 30px;
+      border-radius: 5px;
+    }
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>인천공항 이용자 수 분석 및 예측</h1>
+
+  <h2>1. 개요</h2>
+  <p>
+    KOSIS 국가통계포털의 데이터를 기반으로 2021년부터 2023년까지 인천국제공항을 이용한 외국인의 입출국 데이터를 분석하였습니다.
+    또한 Prophet 라이브러리를 활용하여 향후 10년간 이용자 수를 예측하였습니다.
+  </p>
+
+  <hr />
+  <h2>2. 데이터 전처리</h2>
+  <pre><code>import pandas as pd
+file_path = './ref/출입국항구내외국인성별국제이동연간20250305.csv'
+ori = pd.read_csv(file_path, encoding='EUC-KR')
+
+ex1_data = ori.copy()
+ex1_data.columns = ['airport','type1','gender','year','type2','value']
+ex1_data = ex1_data[ex1_data['type1'] == '외국인']</code></pre>
+
+  <h2>3. 연도별 외국인 이용자 수 집계</h2>
+  <pre><code>ex1_data = ex1_data.groupby('year')['value'].sum().reset_index(name='total')</code></pre>
+  <!-- <img src="./img/출국외국인.png" alt="연도별 외국인 이용자 수" /> -->
+
+  <h2>4. 입국자/출국자 분리 및 시각화</h2>
+  <pre><code>filter2 = ex2_data['type2']=='입국자'
+filter3 = ex2_data['type2']=='출국자'
+ex2_filtered = ex2_data[filter2]
+ex3_filtered = ex2_data[filter3]
+
+ex2_data = ex2_filtered.groupby('year')['value'].sum().reset_index(name="total")
+ex3_data = ex3_filtered.groupby('year')['value'].sum().reset_index(name="total")</code></pre>
+  <img src="./img/출국외국인.png" alt="입국자 차트" />
+  <img src="./img/출국외국인.png" alt="출국자 차트" />
+
+  <hr />
+  <h2>5. 향후 10년 이용자 수 예측 (Prophet 사용)</h2>
+  <pre><code>from prophet import Prophet
+
+ex4_data = ex1_data.copy()
+ex4_data['year'] = pd.to_datetime(ex4_data['year'], format='%Y')
+ex4_data = ex4_data.rename(columns={'year':'ds','total':'y'})
+
+m = Prophet()
+m.fit(ex4_data)
+future = m.make_future_dataframe(periods=10, freq='YE')
+forecast = m.predict(future)
+m.plot(forecast)</code></pre>
+  <img src="./img/예측.png" alt="예측 그래프" />
+
+  <hr />
+  <h2>6. 종합 시각화</h2>
+  <p>입국자, 출국자, 전체 외국인 이용자와 예측 데이터를 종합적으로 시각화한 결과입니다.</p>
+  <img src="./img/비교.png" alt="종합 시각화" />
+
+  <hr />
+  <h2>7. 결론</h2>
+  <p>
+    인천공항을 이용한 외국인의 입출국은 2021~2023년 사이 꾸준히 증가 추세를 보였습니다.
+    Prophet을 통한 예측 결과에 따르면, 이러한 상승세는 향후 10년간도 유지될 것으로 전망됩니다.
+    향후 외국인 관광객 수요 예측 및 공항 인프라 계획 수립에 참고자료로 활용될 수 있습니다.
+  </p>
+</body>
+</html>
