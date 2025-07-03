@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>포트폴리오</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/typeit@8.8.7/dist/index.umd.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Nanum+Gothic&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Raleway", sans-serif;
+        background-color: #f0f4f8;
+        color: #1c1c1c;
+      }
+
+      .intro-section p {
+        font-family: "Nanum Gothic", sans-serif;
+        font-size: 1.2rem;
+        margin-top: 50px;
+      }
+
+      .intro-section p strong {
+        color: #4e8cff;
+        font-weight: bolder;
+      }
+
+      section:first-of-type {
+        background: linear-gradient(270deg, #d0e6ff, #eaf4ff);
+        background-size: 400% 400%;
+        animation: bgmove 12s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        height: 100vh;
+        position: relative;
+        text-align: center;
+        padding: 40px;
+      }
+
+      @keyframes bgmove {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .typeit-box {
+        position: absolute;
+        top: 60px;
+        width: 100%;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1c1c1c;
+        z-index: 2;
+      }
+
+      #typeit > span {
+        color: #4e8cff;
+        font-weight: bold;
+      }
+
+      .intro-box {
+        background-color: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        /* max-width: 900px; */
+        margin-top: 250px;
+        transition: 0.3s ease;
+        /* 여기 수정 */
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 90%;
+        width: 100%;
+      }
+
+      .img-box {
+        background-color: #4e8cff;
+        /* width: 250px;
+        height: 330px; */
+        border-radius: 50%;
+        background-size: cover;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+        /* 여기수정 */
+        flex: 1 1 250px;
+        max-width: 250px;
+        height: auto;
+      }
+      .img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .img-box:hover {
+        transform: scale(1.05) rotate(2deg);
+        transition: 0.3s ease;
+      }
+
+      .intro-info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .intro-info ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .intro-info ul li {
+        margin-bottom: 6px;
+        font-weight: 500;
+        line-height: 1.5;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      a button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 8px;
+        border: 2px solid #4e8cff;
+        background-color: white;
+        color: #4e8cff;
+        transition: all 0.3s ease;
+      }
+
+      a button:hover {
+        background: linear-gradient(45deg, #4e8cff, #a6c8ff);
+        color: white;
+        cursor: pointer;
+      }
+
+      .scroll-down-arrow {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4e8cff;
+        animation: bounce 1.5s infinite;
+        z-index: 10;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-50%, 10px);
+        }
+      }
+
+      section:not(:first-of-type) {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+        color: #444f59;
+        background-color: #ffffff;
+      }
+
+      section:nth-of-type(odd):not(:first-of-type) {
+        background-color: #eaf4ff;
+      }
+      section {
+        position: relative;
+        z-index: 0;
+      }
+
+      /* 프로젝트 카드 */
+
+      .static-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        text-align: left;
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 620px;
+        /* height: 100%; */
+      }
+
+      .static-card p {
+        font-size: medium;
+      }
+
+      .static-card:hover {
+        transform: translateY(-6px);
+      }
+
+      .card-link {
+        margin-top: auto;
+        font-weight: bold;
+        color: #4e8cff;
+        text-decoration: none;
+        font-size: small;
+      }
+
+      .card-link:hover {
+        text-decoration: underline;
+      }
+
+      .card-grid {
+        display: grid;
+        /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        padding: 40px;
+        max-width: 1230px;
+        margin: 0 auto;
+        /* font-size: medium; */
+      }
+
+      .static-card:nth-child(2) p {
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.3; /* 줄간격도 조금 줄임 */
+      }
+      .static-card:nth-child(2) strong {
+        display: inline-block;
+        margin-bottom: 0.3rem;
+      }
+      .static-card:nth-child(3) p {
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.3; /* 줄간격도 조금 줄임 */
+      }
+      .static-card:nth-child(3) strong {
+        display: inline-block;
+        margin-bottom: 0.3rem;
+      }
+      .static-card:nth-child(4) p {
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.3; /* 줄간격도 조금 줄임 */
+      }
+      .static-card:nth-child(4) strong {
+        display: inline-block;
+        margin-bottom: 0.3rem;
+      }
+      .static-card:nth-child(5) p {
+        margin-top: 0.2rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.3; /* 줄간격도 조금 줄임 */
+      }
+      .static-card:nth-child(5) strong {
+        display: inline-block;
+        margin-bottom: 0.3rem;
+      }
+
+      /* 링크색깔 */
+      .github-link {
+        border-left: 4px solid;
+        padding-left: 10px;
+        display: inline-block;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .github-link.darkblue {
+        color: #0d6efd;
+        border-color: #0d6efd;
+      }
+      .github-link.skyblue {
+        color: skyblue;
+        border-color: skyblue;
+      }
+      .github-link.green {
+        color: green;
+        border-color: green;
+      }
+      .github-link.darkorange {
+        color: darkorange;
+        border-color: darkorange;
+      }
+      .github-link.darkseagreen {
+        color: darkseagreen;
+        border-color: darkseagreen;
+      }
+      .github-link.lightsteelblue {
+        color: lightsteelblue;
+        border-color: lightsteelblue;
+      }
+
+      /* contact */
+      #contact {
+        background-color: #f9fcff;
+        padding: 80px 20px;
+      }
+
+      .contact-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .contact-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #4e8cff;
+      }
+
+      .contact-header p {
+        font-size: 1.1rem;
+        color: #888;
+      }
+
+      .contact-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      .contact-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        padding: 30px;
+        width: 230px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .contact-card:hover {
+        transform: translateY(-8px);
+      }
+
+      .contact-icon {
+        background: #4e8cff;
+        color: white;
+        font-size: 2rem;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .contact-card h4 {
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .contact-card p {
+        color: #777;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+
+      .contact-card a {
+        color: #4e8cff;
+        text-decoration: none;
+      }
+
+      .contact-card a:hover {
+        text-decoration: underline;
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 1s ease, transform 1s ease;
+      }
+
+      .fade-in.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 768px) {
+        .intro-box {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          /* 이거추가 */
+          padding: 20px;
+        }
+        .intro-info,
+        .img-box {
+          /* width: 100%; */
+          margin: 10px 0;
+          width: 200px;
+          height: 200px;
+        }
+        .card-grid {
+          padding: 20px;
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .contact-card {
+          width: 90%;
+        }
+      }
+      @media (max-width: 480px) {
+        a button {
+          padding: 8px 16px;
+          font-size: 0.8rem;
+        }
+
+        .intro-section p {
+          font-size: 1rem;
+        }
+
+        .typeit-box {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* === 반응형 추가 === */
+      @media (max-width: 1024px) {
+        /* 태블릿 대응 */
+        .intro-box {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .card-grid {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+
+        .img-box {
+          width: 200px;
+          height: 200px;
+        }
+
+        .intro-box {
+          padding: 20px;
+        }
+
+        a button {
+          font-size: 0.8rem;
+          padding: 8px 16px;
+        }
+
+        .typeit-box {
+          font-size: 1.6rem;
+        }
+
+        .intro-section p {
+          font-size: 1rem;
+        }
+
+        .contact-card {
+          width: 90%;
+        }
+
+        .short-section,
+        .large-section {
+          padding: 40px 20px;
+          height: auto;
+          min-height: auto;
+        }
+      }
+
+      /* 스택 페이지 높이 줄이기 */
+      .short-section {
+        min-height: 80vh;
+        /* height: 180px; 
+        padding: 0; */
+        height: auto;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2rem;
+        color: #444f59;
+        background-color: #ffffff;
+      }
+      .large-section {
+        /* min-height: 130vh; */
+        min-height: auto;
+        padding: 60px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="intro-section">
+      <div class="typeit-box">
+        <h2 id="typeit"></h2>
+        <p>
+          넘치는 아이디어와 콘텐츠 기획능력을 바탕으로 창의적인 문제해결력과
+          IT개발역량을 통해 매력적인 웹사이트를 구현해내는 도전적인 개발자가
+          되고싶은 <strong>박민주</strong>입니다. <br />여행사이트를 만드는
+          프로젝트를 진행하며 벤치마킹한 사이트에 없는 기능을 도입하여 팀의
+          차별성을 확보하려고 노력했습니다.(나중에 수정하기)<br />
+          더 무궁무진한 아이디어를 바탕으로 이를 실현해내는 자급자족가능한
+          훌륭한 개발자가 되도록 항상 노력하겠습니다.
+        </p>
+      </div>
+      <div class="intro-box" id="introBox">
+        <span class="img-box" id="imgBox"
+          ><img src="./python/img/취업사진.png" alt=""
+        /></span>
+        <div class="intro-info">
+          <ul>
+            <li><strong>이름:</strong> 박민주</li>
+            <li><strong>생년월일:</strong> 1998.08.24</li>
+            <li><strong>지역:</strong> 부산광역시</li>
+            <li><strong>이메일:</strong> pmj8298@naver.com</li>
+            <li><strong>학교:</strong> 경성대학교(문화콘텐츠과)</li>
+          </ul>
+          <div class="buttons">
+            <a href="https://github.com/pmj8298"><button>GitHub</button></a>
+            <a
+              href="https://www.notion.so/2025-BigData-Java-182e2c6a3cb68004b43ecca27d654a2a?pvs=4"
+            >
+              <button>Notion</button>
+            </a>
+            <a href="입사지원서_박민주(최종2).pdf" target="_blank">
+              <button>이력서 바로가기</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-down-arrow">↓</div>
+    </section>
+
+    <section class="large-section">
+      <div class="fade-in">
+        <div class="card-grid">
+          <!-- 카드 1 -->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: darkblue;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >파이썬</span
+              >
+            </h5>
+            <hr />
+            <p>
+              - 크롤링: 날씨, 가수, 음악순위, 식단, 셀레니움<br />
+              - Open API: 텔레그램 챗봇 & 구글 Gemini API<br />
+              - DB 실습: MySQL, Oracle, MongoDB등등<br />
+              - 데이터 분석: 단어빈도, 지하철, 정신건강, 쇼핑몰 매출, 교통사고,
+              공항 이용, 취업자수, CCTV, 출생인구, 인구분포 등 <br />
+              - 워드클라우드: 워드클라우드 시각화 <br />
+              - HDFS 분석: 출생인구, 인구분포, 인스타 자동화, 주유가격 자동화
+              <br />
+              - 지도 시각화: 행정지도, 팀문화분석, 스타벅스 매장
+              <a
+                href="https://github.com/pmj8298/2025-Python"
+                class="github-link darkblue"
+                >https://github.com/pmj8298/2025-Python</a
+              >
+            </p>
+            <a href="./python/index.html" class="card-link">자세히 보기 →</a>
+          </div>
+
+          <!-- 카드 2-->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: skyblue;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >부산시 생필품 소비자 물가 시각화 및 비교</span
+              >
+            </h5>
+            <hr />
+            <p style="margin: 0.2rem 0.5rem">
+              <strong style="color: black">의도</strong> <br />
+              - 부산 내 생필품 가격의 구역·연도별 편차를 분석해 사용자에게
+              유용한 최저가 정보를 제공하기 위함<br />
+              <strong style="color: black">역할</strong> <br />
+              - 게시판 구현 (Spring Boot + Oracle DB): 게시글 CRUD (작성, 조회,
+              수정, 삭제), 조회수 증가, 북마크 등록/해제 기능, 댓글/답글 트리
+              구조 구현 및 CRUD 기능, 작성자/제목 기준 검색 기능, 페이징 처리<br />
+              - DB 설계 및 연동: Oracle DB 테이블 설계 및 ERD 구성<br />
+              - 프론트엔드 구현 (React): REST API와의 통신으로 데이터 동기화
+              처리 (useEffect, fetch 등)<br />
+            </p>
+            <hr />
+            <div style="font-size: 1.1rem; margin: 0.2rem 0.5rem">
+              <strong>사용 기술</strong>
+            </div>
+            <p style="margin-top: 10px">
+              <img
+                src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"
+                alt="CSS"
+              />
+              <img
+                src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black"
+                alt="React"
+              />
+              <img
+                src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java&logoColor=white"
+                alt="Java"
+              />
+              <img
+                src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white"
+                alt="Spring Boot"
+              />
+              <img
+                src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=oracle&logoColor=white"
+                alt="Oracle"
+              />
+              <img
+                src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"
+                alt="Git"
+              />
+              <img
+                src="https://img.shields.io/badge/VSCode-007ACC?style=flat-square&logo=visualstudiocode&logoColor=white"
+                alt="VSCode"
+              />
+              <img
+                src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white"
+                alt="Python"
+              />
+            </p>
+            <a
+              href="https://github.com/BSEom/teamP_t1"
+              class="github-link skyblue"
+              >https://github.com/BSEom/teamP_t1</a
+            >
+
+            <a href="https://github.com/BSEom/teamP_t1" class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+
+          <!-- 카드 3-->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: green;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >구인구직 웹사이트 개발 프로젝트</span
+              >
+            </h5>
+            <hr />
+            <p style="margin: 0.2rem 0.5rem">
+              <strong style="color: black">의도</strong> <br />
+              - 다양한 분야의 채용정보 제공, 채용공고 Sorting 용이하게 개발<br />
+              <strong style="color: black">역할</strong> <br />
+
+              - 메인페이지 구성: 기업이 등록한 채용 공고를 메인 화면에 노출하고,
+              시각적인 완성도를 높이기 위해 CSS 디자인에 중점을 둠<br />
+              - 좋아요 기능: 로그인한 사용자가 관심 있는 공고에 '좋아요'를 누를
+              수 있으며, 해당 정보는 DB에 저장되어 반영됨<br />
+              - 필터링 기능: 지역, 직군, 경력, 학력으로 나누어 각 항목에 체크를
+              하면 체크한 항목의 공고만이 메인페이지에 뜰 수 있는 필터링 기능
+              구현
+            </p>
+            <hr />
+            <div style="font-size: 1.1rem; margin: 0.2rem 0.5rem">
+              <strong>사용 기술</strong>
+            </div>
+            <p style="margin-top: 10px">
+              <img
+                src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white"
+                alt="HTML"
+              />
+              <img
+                src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white"
+                alt="CSS"
+              />
+              <img
+                src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"
+                alt="JavaScript"
+              />
+              <img
+                src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java&logoColor=white"
+                alt="Java"
+              />
+              <img
+                src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white"
+                alt="Spring Boot"
+              />
+              <img
+                src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=oracle&logoColor=white"
+                alt="Oracle"
+              />
+              <img
+                src="https://img.shields.io/badge/Kakao_Oven-F7E600?style=flat-square&logo=kakaotalk&logoColor=black"
+                alt="Kakao Oven"
+              />
+              <img
+                src="https://img.shields.io/badge/IntelliJ-000000?style=flat-square&logo=intellijidea&logoColor=white"
+                alt="IntelliJ"
+              />
+              <img
+                src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"
+                alt="Git"
+              />
+              <img
+                src="https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=junit5&logoColor=white"
+                alt="JUnit"
+              />
+            </p>
+            <a
+              href="https://github.com/SeYeonHa/Injob/tree/develop"
+              class="github-link green"
+              >https://github.com/SeYeonHa/Injob/tree/develop</a
+            >
+
+            <a
+              href="https://github.com/SeYeonHa/Injob/tree/develop"
+              class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+
+          <!-- 카드 4-->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: darkorange;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >중계플랫폼 웹사이트</span
+              >
+            </h5>
+            <hr />
+            <p style="margin: 0.2rem 0.5rem">
+              <strong style="color: black">의도</strong> <br />
+              - 혼자 여행을 좋아하는 사람들이 웹에서 예약 뿐만 아니라, MATE를
+              함께 구할 수 있는 현대인의 여행 생활 필수 사이트 개발<br />
+              <strong style="color: black">역할</strong> <br />
+
+              - 화면 설계 및 UI 구성: 전체 사이트 레이아웃과 기능 배치를 기획 및
+              설계<br />
+              - 커뮤니티 게시판 구성: 여행 메이트 구하기, 여행 뉴스, 공지사항,
+              Q&A 등 다양한 게 시판 구현<br />
+              - 여행 메이트 게시판: CRUD, 댓글 작성/삭제, 댓글 좋아요, 웹소켓
+              기반 채팅방 기능 구현. → 기존 여행 사이트와의 차별화 포인트로
+              기획<br />
+              - 여행 뉴스 게시판: 여행 시 위험 국가나 현지 상황을 전달하기 위한
+              뉴스 게시판 구축<br />
+              - 공지사항 / Q&A 게시판: 사용자 공지 및 문의 응답용 게시판 구현
+            </p>
+            <hr />
+            <div style="font-size: 1.1rem; margin: 0.2rem 0.5rem">
+              <strong>사용 기술</strong>
+            </div>
+            <p style="margin-top: 0px">
+              <img
+                src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white"
+                alt="HTML"
+              />
+              <img
+                src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white"
+                alt="CSS"
+              />
+              <img
+                src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"
+                alt="JavaScript"
+              />
+              <img
+                src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java&logoColor=white"
+                alt="Java"
+              />
+              <img
+                src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white"
+                alt="Spring Boot"
+              />
+              <img
+                src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=oracle&logoColor=white"
+                alt="Oracle"
+              />
+              <img
+                src="https://img.shields.io/badge/Kakao_Oven-F7E600?style=flat-square&logo=kakaotalk&logoColor=black"
+                alt="Kakao Oven"
+              />
+              <img
+                src="https://img.shields.io/badge/IntelliJ-000000?style=flat-square&logo=intellijidea&logoColor=white"
+                alt="IntelliJ"
+              />
+              <img
+                src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"
+                alt="Git"
+              />
+              <img
+                src="https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=junit5&logoColor=white"
+                alt="JUnit"
+              />
+            </p>
+            <a
+              href="https://github.com/kusam00093/Escape/tree/develop"
+              class="github-link darkorange"
+              >https://github.com/kusam00093/Escape/tree/develop</a
+            >
+
+            <a
+              href="https://github.com/kusam00093/Escape/tree/develop"
+              class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+
+          <!-- 카드 5-->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: darkseagreen;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >학생 출석 관리 시스템</span
+              >
+            </h5>
+            <hr />
+            <p style="margin: 0.2rem 0.5rem">
+              <strong style="color: black">의도</strong> <br />
+              - 출석 관리 효율화와 실시간 정보 제공, 데이터 기반 학사 운영을
+              위해 개발<br />
+              <strong style="color: black">역할</strong> <br />
+              - 달력 위젯: 출석 상태(출석, 지각, 결석) 및 시간 표시<br />
+              - 월별 출석 비율을 수평 막대그래프로 시각화<br />
+              - 출석 데이터 로드 및 달력과 그래프 동기화<br />
+              - 지각 3회는 결석 1회로 환산하는 출석률 계산 로직<br />
+              - PyQt5의 QCalendarWidget 커스텀 페인팅<br />
+              - matplotlib 그래프를 Qt 위젯에 임베딩<br />
+              - 데이터베이스 설계 및 Oracle DB와 연동하여 데이터 처리<br />
+              - Faker 라이브러리를 활용해 실제와 유사한 출석 데이터를 대량으로
+              생성 후 Oracle 데이터베이스에 자동으로 삽입하여 대량의 임의
+              데이터를 개발에 활용
+            </p>
+            <hr />
+            <div style="font-size: 1.1rem; margin: 0.2rem 0.5rem">
+              <strong>사용 기술</strong>
+            </div>
+            <p style="margin-top: 0px">
+              <img
+                src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white"
+                alt="HTML"
+              />
+              <img
+                src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white"
+                alt="CSS"
+              />
+              <img
+                src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=oracle&logoColor=white"
+                alt="Oracle"
+              />
+              <img
+                src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"
+                alt="Git"
+              />
+              <img
+                src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white"
+                alt="Python"
+              />
+              <img
+                src="https://img.shields.io/badge/PyQt-41CD52?style=flat-square&logo=qt&logoColor=white"
+                alt="PyQt"
+              />
+            </p>
+            <a
+              href="https://github.com/kusam00093/Escape/tree/develop"
+              class="github-link darkseagreen"
+              >https://github.com/kusam00093/Escape/tree/develop</a
+            >
+
+            <a
+              href="https://github.com/kusam00093/Escape/tree/develop"
+              class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+
+          <!-- 카드 6: HDFS 분석 -->
+          <div class="static-card">
+            <h5>
+              <span
+                style="
+                  color: white;
+                  background: lightsteelblue;
+                  padding: 10px 10px;
+                  border-radius: 10px;
+                "
+                >구인구직 웹사이트 개발 프로젝트</span
+              >
+            </h5>
+            <hr />
+            <p style="margin: 0.2rem 0.5rem">
+              <strong style="color: black">의도</strong> <br />
+              - 잡코리아, 사람인을 벤치마킹하여 주어진 요구사항을 토대로
+              구인구직 사이트의 기능을 구현<br />
+              <strong style="color: black">역할</strong> <br />
+
+              - 화면 설계(UI) : 카카오 오븐으로 핵심 기능 설계 및 구성<br />
+              - DB 설계 및 자유게시판 CRUD 구현<br />
+              - 게시판 페이징 처리<br />
+              - JUnit 기반 단위테스트<br />
+              - 기업회원용 이력서 리스트 및 상세 보기 구현<br />
+            </p>
+            <hr />
+            <div style="font-size: 1.1rem; margin: 0.2rem 0.5rem">
+              <strong>사용 기술</strong>
+            </div>
+            <p style="margin-top: 0px">
+              <img
+                src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white"
+                alt="HTML"
+              />
+              <img
+                src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white"
+                alt="CSS"
+              />
+              <img
+                src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"
+                alt="JavaScript"
+              />
+              <img
+                src="https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=java&logoColor=white"
+                alt="Java"
+              />
+              <img
+                src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white"
+                alt="Spring Boot"
+              />
+              <img
+                src="https://img.shields.io/badge/Oracle-F80000?style=flat-square&logo=oracle&logoColor=white"
+                alt="Oracle"
+              />
+              <img
+                src="https://img.shields.io/badge/Kakao_Oven-F7E600?style=flat-square&logo=kakaotalk&logoColor=black"
+                alt="Kakao Oven"
+              />
+              <img
+                src="https://img.shields.io/badge/IntelliJ-000000?style=flat-square&logo=intellijidea&logoColor=white"
+                alt="IntelliJ"
+              />
+              <img
+                src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white"
+                alt="Git"
+              />
+              <img
+                src="https://img.shields.io/badge/JUnit-25A162?style=flat-square&logo=junit5&logoColor=white"
+                alt="JUnit"
+              />
+            </p>
+            <a
+              href="https://github.com/kusam00093/Escape/tree/develop"
+              class="github-link lightsteelblue"
+              >https://github.com/DoKyeomKim/TeamProject</a
+            >
+
+            <a
+              href="https://github.com/DoKyeomKim/TeamProject"
+              class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+
+          <!-- 카드 7 -->
+          <div class="static-card">
+            <h5>최종 프로젝트</h5>
+            <p>
+              - <br />
+              - <br />
+              -
+            </p>
+            <a href="./python/map.html" class="card-link">자세히 보기 →</a>
+          </div>
+
+          <!-- 카드 8 -->
+          <div class="static-card">
+            <h5>도커</h5>
+            <p>
+              - <br />
+              - <br />
+              -
+            </p>
+            <a href="./python/wordcloud.html" class="card-link"
+              >자세히 보기 →</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="short-section">
+      <div class="fade-in text-center">
+        <div class="container text-start">
+          <h3 style="margin-bottom: 30px">기술 스택</h3>
+
+          <div class="row">
+            <div class="col-md-6">
+              <h5>Language</h5>
+              <div class="badge-row" style="margin-top: 0px">
+                <img
+                  src="https://img.shields.io/badge/Java-%23ED8B00.svg?style=flat&logo=java&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/Javascript-%23F7DF1E.svg?style=flat&logo=javascript&logoColor=black"
+                />
+                <img
+                  src="https://img.shields.io/badge/HTML5-%23E34F26.svg?style=flat&logo=html5&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/CSS3-%231572B6.svg?style=flat&logo=css3&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/SCSS-%23CD6799.svg?style=flat&logo=sass&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/Python-%233776AB.svg?style=flat&logo=python&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">Framework / Library</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Spring-%236DB33F.svg?style=flat&logo=spring&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/SpringBoot-%23000000.svg?style=flat&logo=springboot&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/JPA-%23007ACC.svg?style=flat&logo=hibernate&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/MyBatis-%23007ACC.svg?style=flat&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/jQuery-%230769AD.svg?style=flat&logo=jquery&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/Bootstrap-%237952B3.svg?style=flat&logo=bootstrap&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">RDBMS / NoSQL</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Oracle-%23F80000.svg?style=flat&logo=oracle&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/MySQL-%234479A1.svg?style=flat&logo=mysql&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/MongoDB-%2347A248.svg?style=flat&logo=mongodb&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">Server / WAS</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Apache Tomcat-%23F8DC75.svg?style=flat&logo=apachetomcat&logoColor=black"
+                />
+              </div>
+            </div>
+
+            <!-- 오른쪽 컬럼 -->
+            <div class="col-md-6">
+              <h5>OS</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Windows-%230078D6.svg?style=flat&logo=windows&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/Linux-%23FCC624.svg?style=flat&logo=linux&logoColor=black"
+                />
+                <img
+                  src="https://img.shields.io/badge/Docker-%232496ED.svg?style=flat&logo=docker&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">IDE</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Eclipse-%232C2255.svg?style=flat&logo=eclipseide&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/VSCode-%23007ACC.svg?style=flat&logo=visualstudiocode&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">Build Tool</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Maven-%23C71A36.svg?style=flat&logo=apachemaven&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/Gradle-%2302303A.svg?style=flat&logo=gradle&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">Version Control</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/Git-%23F05032.svg?style=flat&logo=git&logoColor=white"
+                />
+                <img
+                  src="https://img.shields.io/badge/GitHub-%23181717.svg?style=flat&logo=github&logoColor=white"
+                />
+              </div>
+
+              <h5 class="mt-4">Test Tool</h5>
+              <div class="badge-row">
+                <img
+                  src="https://img.shields.io/badge/JUnit5-%2325A162.svg?style=flat&logo=junit5&logoColor=white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="fade-in">
+        <div class="contact-header">
+          <h2>Contact Me</h2>
+          <p>성장하는 개발자가 되겠습니다. 연락주세요.</p>
+        </div>
+
+        <div class="contact-cards">
+          <div class="contact-card">
+            <div class="contact-icon">📍</div>
+            <h4>Address</h4>
+            <p>부산광역시</p>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">📞</div>
+            <h4>Contact Number</h4>
+            <p><a h시ef="tel:01045610248">+ 010 4561 0248</a></p>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <h4>Email Address</h4>
+            <p><a href="mailto:cookie00421@gmail.com">pmj8298@naver.com</a></p>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon">🌐</div>
+            <h4>Website</h4>
+            <p>
+              <a href="http://bjava.iptime.org:8875/portfolio" target="_blank"
+                >mysite</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="short-section">
+      <div class="fade-in">감사합니다 🙏</div>
+    </section>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        new TypeIt("#typeit", {
+          speed: 60,
+          startDelay: 300,
+        })
+          .type("어서오세요 박민주의 포트폴리오 사이트 입니다.", {
+            delay: 1000,
+          })
+          .move(-19, { delay: 1000 })
+          // .delete(4, { delay: 1000 })
+          .type("신입 개발자 ", { delay: 400 })
+          .go();
+
+        const fadeEls = document.querySelectorAll(".fade-in");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("show");
+              }
+            });
+          },
+          { threshold: 0.3 }
+        );
+        fadeEls.forEach((el) => observer.observe(el));
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
